@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/emails")
+@RequestMapping("/api/emails")
 public class EmailRecordController {
 
     private final EmailRecordService emailRecordService;
