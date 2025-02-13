@@ -31,3 +31,52 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Compiled output
+/target/
+/build/
+
+# more IDE files
+.idea/
+/out/
+.metadata/
+bin/
+tmp/
+.settings/
+
+# Executable Archives
+*.jar
+*.war
+*.ear
+*.zip
+
+# Log files
+*.log
+*.out
+
+# Temporary files
+*.tmp
+*~
+\#*\#
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Sensitive information
+application*.properties
+application*.yml
+*.keystore
+*.p12
+*.jks
+credentials.properties
+secrets.properties
+*.passwd
+*.credentials
+*.key
+
+# Generated code
+/src/main/java/com/example/generated/
+
+# GitHub
+#.gitignore
