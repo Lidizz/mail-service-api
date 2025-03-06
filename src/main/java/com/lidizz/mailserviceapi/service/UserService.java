@@ -31,8 +31,9 @@ public class UserService {
         return optionalUser.orElseThrow(() -> new UserNotFoundException("User id: " + id + ", was not found."));
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User getUserByUsername(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        return optionalUser.orElseThrow(() -> new UserNotFoundException("Username: " + username + ", was not found."));
     }
 
     public Optional<User> getUserByEmail(String email) {
