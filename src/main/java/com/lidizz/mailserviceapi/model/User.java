@@ -32,7 +32,7 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "sender", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<EmailRecord> sentEmailRecords = new HashSet<>();  // Use fully qualified name
+    private Set<EmailRecord> sentEmailRecords = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.REMOVE, orphanRemoval = true)
