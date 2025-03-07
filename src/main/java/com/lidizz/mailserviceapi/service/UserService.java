@@ -28,16 +28,17 @@ public class UserService {
 
     public User getUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        return optionalUser.orElseThrow(() -> new UserNotFoundException("User id: " + id + ", was not found."));
+        return optionalUser.orElseThrow(() -> new UserNotFoundException("User with user-id: " + id + ", was not found."));
     }
 
     public User getUserByUsername(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        return optionalUser.orElseThrow(() -> new UserNotFoundException("Username: " + username + ", was not found."));
+        return optionalUser.orElseThrow(() -> new UserNotFoundException("User with username: " + username + ", was not found."));
     }
 
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User getUserByEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        return optionalUser.orElseThrow(() -> new UserNotFoundException("User with email: " + email + ", was not found."));
     }
 
     public User createUser(User user) {
