@@ -5,9 +5,9 @@ import com.lidizz.mailserviceapi.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,21 +45,26 @@ public class UserService {
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            if (e instanceof DuplicateKeyException) {
-                // A unique constraint was violated
-                // Check which constraint was violated (username or email)
-                if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-                    throw new UsernameAlreadyExistsException("Username already exists: " + user.getUsername());
-                } else if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-                    throw new EmailAlreadyExistsException("EmailRecord already exists: " + user.getEmail());
-                } else {
-                    // Should not happen, but handle it just in case
-                    throw new RuntimeException("Duplicate key violation, but could not determine which field.");
+            // Get the root cause
+            SQLException sqlException = e.getRootCause() instanceof SQLException
+                    ? (SQLException) e.getRootCause()
+                    : null;
+
+            if (sqlException != null && "23505".equals(sqlException.getSQLState())) {
+                String message = sqlException.getMessage().toLowerCase();
+
+                // Identify which is duplicate, if both are duplicate display the email
+                if (message.contains("(email)=")) {
+                    throw new EmailAlreadyExistsException(
+                            "Email already exists: " + user.getEmail());
+                } else if (message.contains("(username)=")) {
+                    throw new UsernameAlreadyExistsException(
+                            "Username already exists: " + user.getUsername());
                 }
-            } else {
-                // Some other data integrity violation occurred
-                throw new RuntimeException("Error creating user: " + e.getMessage());
             }
+
+            // Fallback for other data integrity issues
+            throw new RuntimeException("Error creating user: " + e.getMessage());
         }
     }
 
