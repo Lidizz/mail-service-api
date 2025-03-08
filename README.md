@@ -134,7 +134,8 @@ Now, proceed to your preferred setup method below.
        export DB_USERNAME=postgres
        export DB_PASSWORD=your_password
        ```
-     - Replace `your_password` with your PostgreSQL password from the installation.
+     - Replace `your_password` with your PostgreSQL password from the installation.  
+     
    - Verify that they’re set:
      - **Windows (PowerShell)**:
        ```powershell
@@ -400,81 +401,85 @@ This section demonstrates testing all endpoints from a command-line interface (C
      ```
      - Response: No content (204 status).
 
-   **Command Notes**: Uses `-Uri` (URL), `-Method` (HTTP method), `-Headers` (hashtable), `-Body` (JSON payload, less escaping needed). Use `.Content` to see raw JSON (e.g., `(Invoke-WebRequest ...).Content`).
+   **Command Notes**: Uses `-Uri` (URL), `-Method` (HTTP method), `-Headers` (hashtable), `-Body` (JSON payload, less escaping needed). Use `.Content` to see raw JSON (e.g., `(Invoke-WebRequest ...).Content`).  
+
 
 3. **Testing with Windows (`curl.exe`)**:
+   - **Note**: These examples use the Windows Command Prompt (CMD) for `curl.exe` commands due to PowerShell’s parsing limitations with JSON data. Open CMD by typing `cmd` in the Start menu.
+
    - **Create a User (POST /api/users)**:
-     ```powershell
-     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d '{\"username\":\"charlie\",\"email\":\"charlie@example.com\",\"password\":\"pass789\"}'
+     ```cmd
+     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" --data-raw "{\"username\":\"charlie\",\"email\":\"charlie@example.com\",\"password\":\"pass789\"}"
      ```
      - Response: `{"id":3,...}` (note the `id`, e.g., `3`).
    - **Create Another User**:
-     ```powershell
-     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d '{\"username\":\"dave\",\"email\":\"dave@example.com\",\"password\":\"pass101\"}'
+     ```cmd
+     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" --data-raw "{\"username\":\"dave\",\"email\":\"dave@example.com\",\"password\":\"pass101\"}"
      ```
      - Response: `{"id":4,...}` (note `id`, e.g., `4`).
    - **Get All Users (GET /api/users)**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/users"
      ```
      - Response: `[{"id":1,...},{"id":2,...},{"id":3,"username":"charlie",...},{"id":4,"username":"dave",...}]`.
    - **Get User by Username (GET /api/users/username/{username})**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/users/username/charlie"
      ```
      - Response: `{"id":3,"username":"charlie",...}`.
    - **Get User by ID (GET /api/users/id/{id})**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/users/id/3"
      ```
      - Response: `{"id":3,"username":"charlie",...}`.
    - **Get User by Email (GET /api/users/email/{email})**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/users/email/charlie@example.com"
      ```
      - Response: `{"id":3,"username":"charlie",...}`.
    - **Update User (PUT /api/users/{id})**:
-     ```powershell
-     curl.exe -X PUT "http://localhost:8080/api/users/3" -H "Content-Type: application/json" -d '{\"username\":\"charlie_new\",\"email\":\"charlie.new@example.com\",\"password\":\"newpass111\"}'
+     ```cmd
+     curl.exe -X PUT "http://localhost:8080/api/users/3" -H "Content-Type: application/json" --data-raw "{\"username\":\"charlie_new\",\"email\":\"charlie.new@example.com\",\"password\":\"newpass111\"}"
      ```
      - Response: `{"id":3,"username":"charlie_new",...}`.
    - **Delete User (DELETE /api/users/{id})**:
-     ```powershell
+     ```cmd
      curl.exe -X DELETE "http://localhost:8080/api/users/4"
      ```
      - Response: No content (204 status).
    - **Send an Email (POST /api/emails)**:
-     ```powershell
-     curl.exe -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d '{\"subject\":\"Lunch\",\"senderId\":3,\"recipientId\":4,\"body\":\"Hi Dave, lunch at noon?\"}'
+     ```cmd
+     curl.exe -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" --data-raw "{\"subject\":\"Lunch\",\"senderId\":3,\"recipientId\":4,\"body\":\"Hi Dave, lunch at noon?\"}"
      ```
      - Response: `{"id":2,...}` (note `id`, e.g., `2`).
    - **Get All Emails (GET /api/emails)**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/emails"
      ```
      - Response: `[{"id":1,...},{"id":2,"subject":"Lunch",...}]`.
    - **Get Emails by Sender (GET /api/emails/sender/{senderId})**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/emails/sender/3"
      ```
      - Response: `[{"id":2,"subject":"Lunch",...}]`.
    - **Get Emails by Recipient (GET /api/emails/recipient/{recipientId})**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/emails/recipient/4"
      ```
      - Response: `[{"id":2,"subject":"Lunch",...}]`.
    - **Get Email by ID (GET /api/emails/{id})**:
-     ```powershell
+     ```cmd
      curl.exe -X GET "http://localhost:8080/api/emails/2"
      ```
      - Response: `{"id":2,"subject":"Lunch",...}`.
    - **Delete Email (DELETE /api/emails/{id})**:
-     ```powershell
+     ```cmd
      curl.exe -X DELETE "http://localhost:8080/api/emails/2"
      ```
      - Response: No content (204 status).
 
-   **Command Notes**: Uses `-X` (method), `-H` (header), `-d` (data, use single quotes in PowerShell to avoid escaping issues). Add `-s` to suppress progress output if desired.
+   **Command Notes**: Uses `-X` (method), `-H` (header), `--data-raw` (data). In CMD, `--data-raw` with double quotes (e.g., `"{\"key\":\"value\"}"`) ensures JSON is sent correctly. Use `-d` as an alternative if preferred, though `--data-raw` is recommended for reliability. Add `-s` to suppress progress output if desired. Ensure `senderId` and `recipientId` exist in the database before testing.  
+
 
 4. **Testing with Linux/macOS (`curl`)**:
    - **Create a User (POST /api/users)**:
