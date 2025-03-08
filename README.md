@@ -378,12 +378,12 @@ This section demonstrates testing all endpoints from a command-line interface (C
 3. **Testing with Windows (`curl.exe`)**:
    - **Create a User (POST /api/users)**:
      ```powershell
-     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"username\":\"alice\",\"email\":\"alice@example.com\",\"password\":\"pass123\"}"
+     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d '{\"username\":\"charlie\",\"email\":\"charlie@example.com\",\"password\":\"pass789\"}'
      ```
      - Response: `{"id":1,...}` (note the `id`, e.g., `1`).
    - **Create Another User**:
      ```powershell
-     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"username\":\"bob\",\"email\":\"bob@example.com\",\"password\":\"pass456\"}"
+     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d '{\"username\":\"jason\",\"email\":\"jason@example.com\",\"password\":\"pass456\"}'
      ```
      - Response: `{"id":2,...}` (note `id`, e.g., `2`).
    - **Get All Users (GET /api/users)**:
