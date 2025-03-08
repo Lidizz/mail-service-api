@@ -279,7 +279,7 @@ Now, proceed to your preferred setup method below.
 
 This section shows how to test all endpoints using CLI (cURL), Postman, and Swagger UI. Follow the workflow: create users, send emails, retrieve data, update, and delete. For CLI testing on Windows, you can use PowerShell’s native `Invoke-WebRequest` or `curl.exe` (if installed separately); on Linux/macOS, use standard `curl`. Note: Create users first, as email endpoints require existing user IDs.
 
-*NOTE*: I have added mock data to the project so you can start testing immediately.
+*NOTE*: I have added mock data to the project so you can start testing immediately (See util.MockData for details).
 
 ---
 
@@ -343,7 +343,7 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Response: No content (204 status).
    - **Send an Email (POST /api/emails)**:
      ```powershell
-     Invoke-WebRequest -Uri "http://localhost:8080/api/emails" -Method POST -Headers @{"Content-Type" = "application/json"} -Body '{"subject":"Meeting","sender":{"id":1},"recipient":{"id":2},"body":"Hi Bob, meeting at 10."}'
+     Invoke-WebRequest -Uri "http://localhost:8080/api/emails" -Method POST -Headers @{"Content-Type" = "application/json"} -Body '{"subject":"Meeting","senderId":1,"recipientId":2,"body":"Hi, meeting at 10."}'
      ```
      - Response: `{"id":1,...}` (note `id`, e.g., `1`).
    - **Get All Emails (GET /api/emails)**:
@@ -372,7 +372,8 @@ This section demonstrates testing all endpoints from a command-line interface (C
      ```
      - Response: No content (204 status).
 
-   **Command Notes**: Uses `-Uri` (URL), `-Method` (HTTP method), `-Headers` (hashtable), `-Body` (JSON payload, less escaping needed). Use `.Content` to see raw JSON (e.g., `(Invoke-WebRequest ...).Content`).  
+   **Command Notes**: Uses `-Uri` (URL), `-Method` (HTTP method), `-Headers` (hashtable), `-Body` (JSON payload, less escaping needed). Use `.Content` to see raw JSON (e.g., `(Invoke-WebRequest ...).Content`).
+
 
 3. **Testing with Windows (`curl.exe`)**:
    - **Create a User (POST /api/users)**:
@@ -417,7 +418,7 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Response: No content (204 status).
    - **Send an Email (POST /api/emails)**:
      ```powershell
-     curl.exe -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d "{\"subject\":\"Meeting\",\"sender\":{\"id\":1},\"recipient\":{\"id\":2},\"body\":\"Hi Bob, meeting at 10.\"}"
+     curl.exe -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d "{\"subject\":\"Meeting\",\"senderId\":1,\"recipientId\":2,\"body\":\"Hi, meeting at 10.\"}"
      ```
      - Response: `{"id":1,...}` (note `id`, e.g., `1`).
    - **Get All Emails (GET /api/emails)**:
@@ -491,7 +492,7 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Response: No content (204 status).
    - **Send an Email (POST /api/emails)**:
      ```bash
-     curl -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d "{\"subject\":\"Meeting\",\"sender\":{\"id\":1},\"recipient\":{\"id\":2},\"body\":\"Hi Bob, meeting at 10.\"}"
+     curl -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d "{\"subject\":\"Meeting\",\"senderId\":1,\"recipientId\":2,\"body\":\"Hi, meeting at 10.\"}"
      ```
      - Response: `{"id":1,...}` (note `id`, e.g., `1`).
    - **Get All Emails (GET /api/emails)**:
@@ -536,7 +537,11 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Headers: `Content-Type: application/json`.
      - Body > raw > JSON:
        ```json
-       {"username":"alice","email":"alice@example.com","password":"pass123"}
+       {
+        "username":"alice",
+        "email":"alice@example.com",
+        "password":"pass123"
+       }
        ```
      - Click “Send”. Response: `201 Created`, `{"id":1,...}` (note `id`).
    - **Create Another User**: Repeat with `{"username":"bob","email":"bob@example.com","password":"pass456"}` (note `id`, e.g., `2`).
@@ -558,7 +563,11 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Headers: `Content-Type: application/json`.
      - Body:
        ```json
-       {"username":"alice_new","email":"alice.new@example.com","password":"newpass789"}
+       {
+        "username":"alice_new",
+        "email":"alice.new@example.com",
+        "password":"newpass789"
+       }
        ```
      - Send. Response: `200 OK`, updated user.
    - **Delete User (DELETE /api/users/{id})**:
@@ -571,7 +580,12 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Headers: `Content-Type: application/json`.
      - Body:
        ```json
-       {"subject":"Meeting","sender":{"id":1},"recipient":{"id":2},"body":"Hi Bob, meeting at 10."}
+       {
+         "subject": "Meeting",
+         "senderId": 1,
+         "recipientId": 2,
+         "body": "Hi, meeting at 10."
+         }
        ```
      - Send. Response: `201 Created`, `{"id":1,...}`.
    - **Get All Emails (GET /api/emails)**:
@@ -600,7 +614,11 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Expand `POST /api/users`, click “Try it out”.
      - Edit the request body:
        ```json
-       {"username":"alice","email":"alice@example.com","password":"pass123"}
+       {
+        "username":"alice",
+        "email":"alice@example.com",
+        "password":"pass123"
+       }
        ```
      - Click “Execute”. Response: `201`, `{"id":1,...}` (note `id`).
    - **Create Another User**: Repeat with `{"username":"bob","email":"bob@example.com","password":"pass456"}` (note `id`).
@@ -616,7 +634,11 @@ This section demonstrates testing all endpoints from a command-line interface (C
    - **Update User (PUT /api/users/{id})**:
      - Enter `1` in `id`, edit body:
        ```json
-       {"username":"alice_new","email":"alice.new@example.com","password":"newpass789"}
+       {
+        "username":"alice_new",
+        "email":"alice.new@example.com",
+        "password":"newpass789"
+       }
        ```
      - Execute. Response: `200`, updated user.
    - **Delete User (DELETE /api/users/{id})**:
@@ -626,7 +648,12 @@ This section demonstrates testing all endpoints from a command-line interface (C
    - **Send an Email (POST /api/emails)**:
      - Expand `POST /api/emails`, edit body:
        ```json
-       {"subject":"Meeting","sender":{"id":1},"recipient":{"id":2},"body":"Hi Bob, meeting at 10."}
+        {
+         "subject": "Meeting",
+         "senderId": 1,
+         "recipientId": 2,
+         "body": "Hi, meeting at 10."
+         }
        ```
      - Execute. Response: `201`, `{"id":1,...}`.
    - **Get All Emails (GET /api/emails)**:
