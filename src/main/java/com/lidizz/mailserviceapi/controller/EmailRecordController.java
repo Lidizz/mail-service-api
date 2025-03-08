@@ -1,6 +1,7 @@
 package com.lidizz.mailserviceapi.controller;
 
 import com.lidizz.mailserviceapi.model.EmailRecord;
+import com.lidizz.mailserviceapi.model.EmailRecordDTO;
 import com.lidizz.mailserviceapi.model.User;
 import com.lidizz.mailserviceapi.service.EmailNotFoundException;
 import com.lidizz.mailserviceapi.service.EmailRecordService;
@@ -21,6 +22,7 @@ public class EmailRecordController {
 
     private final EmailRecordService emailRecordService;
     private final UserService userService;
+
     @Autowired
     public EmailRecordController(EmailRecordService emailRecordService, UserService userService) {
         this.emailRecordService = emailRecordService;
@@ -50,7 +52,19 @@ public class EmailRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<EmailRecord> createEmail(@Valid @RequestBody EmailRecord emailRecord) {
+    public ResponseEntity<EmailRecord> createEmail(@Valid @RequestBody EmailRecordDTO emailDTO) {
+        // Fetch sender and recipient by ID
+        User sender = userService.getUserById(emailDTO.getSenderId());
+        User recipient = userService.getUserById(emailDTO.getRecipientId());
+
+        // Create EmailRecord entity
+        EmailRecord emailRecord = new EmailRecord(
+                emailDTO.getSubject(),
+                emailDTO.getBody(),
+                sender,
+                recipient
+        );
+
         EmailRecord createdEmailRecord = emailRecordService.createEmail(emailRecord);
         return new ResponseEntity<>(createdEmailRecord, HttpStatus.CREATED);
     }
