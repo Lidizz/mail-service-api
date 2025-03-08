@@ -244,7 +244,7 @@ Now, proceed to your preferred setup method below.
    - Click `Apply`.
 
 4. **Build and Run**:
-   - Right-click the project > `Maven > Update Project`, check “Force Update of Snapshots/Releases”, and click “OK”.
+   - Right-click the project > `Maven > Update Project`, check “Force Update of Snapshots/Releases`, and click “OK”.
    - Right-click `pom.xml` > `Run As > Maven Build`.
    - In “Goals”, type `clean install`, then click “Run”. Wait for “BUILD SUCCESS”.
    - Right-click the project > `Run As > Java Application`, select `MailServiceApiApplication`, and click “OK”.
@@ -277,16 +277,16 @@ Now, proceed to your preferred setup method below.
 
 ## Testing the API
 
-This section shows how to test all endpoints using CLI (cURL), Postman, and Swagger UI. Follow the workflow: create users, send emails, retrieve data, update, and delete. For CLI testing on Windows, you can use PowerShell’s native `Invoke-WebRequest` or `curl.exe` (if installed separately); on Linux/macOS, use standard `curl`. Note: Create users first, as email endpoints require existing user IDs.
+This section shows how to test all endpoints using CLI (cURL), Postman, and Swagger UI. Follow the workflow: create users, send emails, retrieve data, update, and delete. For CLI testing on Windows, you can use PowerShell’s native `Invoke-WebRequest` or `curl.exe` (if installed separately); on Linux/macOS, use standard `curl`. Note: Create users first, as email endpoints require existing user IDs. Each test method below uses unique users to demonstrate different data across tools and avoid conflicts.
 
-*NOTE*: I have added mock data to the project so you can start testing immediately (See util.MockData for details).
+*NOTE*: I have added mock data to the project so you can start testing immediately (See `util.MockData` for details—e.g., includes users like ‘testuser’ and emails like ‘Test Email’).
 
 ---
 
 ### Testing via CLI with cURL
 
 This section demonstrates testing all endpoints from a command-line interface (CLI). Choose your tool based on your system:
-- **PowerShell (`Invoke-WebRequest`)**: Built into Windows, no extra install needed. Use `.Content` to see raw JSON (e.g., (`Invoke-WebRequest ...).Content)`.
+- **PowerShell (`Invoke-WebRequest`)**: Built into Windows, no extra install needed. Use `.Content` to see raw JSON (e.g., `(Invoke-WebRequest ...).Content`).
 - **Windows (`curl.exe`)**: Requires `curl` installed (e.g., via Git Bash or `choco install curl`). Check with `Get-Command curl.exe`.
 - **Linux/macOS (`curl`)**: Pre-installed on most systems.
 
@@ -320,15 +320,27 @@ This section demonstrates testing all endpoints from a command-line interface (C
      ```powershell
      Invoke-WebRequest -Uri "http://localhost:8080/api/users/username/alice" -Method GET
      ```
+     - Example of using the .Content:
+     ```powershell
+     (Invoke-WebRequest -Uri "http://localhost:8080/api/users/username/alice" -Method GET).Content
+     ```
      - Response: `{"id":1,"username":"alice",...}`.
    - **Get User by ID (GET /api/users/id/{id})**:
      ```powershell
      Invoke-WebRequest -Uri "http://localhost:8080/api/users/id/1" -Method GET
      ```
+     - Example of using the .Content:
+     ```powershell
+     (Invoke-WebRequest -Uri "http://localhost:8080/api/users/id/1" -Method GET).Content
+     ```
      - Response: `{"id":1,"username":"alice",...}`.
    - **Get User by Email (GET /api/users/email/{email})**:
      ```powershell
      Invoke-WebRequest -Uri "http://localhost:8080/api/users/email/alice@example.com" -Method GET
+     ```
+     - Example of using the .Content:
+     ```powershell
+     (Invoke-WebRequest -Uri "http://localhost:8080/api/users/email/alice@example.com" -Method GET).Content
      ```
      - Response: `{"id":1,"username":"alice",...}`.
    - **Update User (PUT /api/users/{id})**:
@@ -343,27 +355,43 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Response: No content (204 status).
    - **Send an Email (POST /api/emails)**:
      ```powershell
-     Invoke-WebRequest -Uri "http://localhost:8080/api/emails" -Method POST -Headers @{"Content-Type" = "application/json"} -Body '{"subject":"Meeting","senderId":1,"recipientId":2,"body":"Hi, meeting at 10."}'
+     Invoke-WebRequest -Uri "http://localhost:8080/api/emails" -Method POST -Headers @{"Content-Type" = "application/json"} -Body '{"subject":"Meeting","senderId":1,"recipientId":2,"body":"Hi Bob, meeting at 10am?"}'
      ```
      - Response: `{"id":1,...}` (note `id`, e.g., `1`).
    - **Get All Emails (GET /api/emails)**:
      ```powershell
      Invoke-WebRequest -Uri "http://localhost:8080/api/emails" -Method GET
      ```
+     - Example of using the .Content:
+     ```powershell
+     (Invoke-WebRequest -Uri "http://localhost:8080/api/emails" -Method GET).Content
+     ```
      - Response: `[{"id":1,"subject":"Meeting",...}]`.
    - **Get Emails by Sender (GET /api/emails/sender/{senderId})**:
      ```powershell
      Invoke-WebRequest -Uri "http://localhost:8080/api/emails/sender/1" -Method GET
+     ```
+     - Example of using the .Content:
+     ```powershell
+     (Invoke-WebRequest -Uri "http://localhost:8080/api/emails/sender/1" -Method GET).Content
      ```
      - Response: `[{"id":1,"subject":"Meeting",...}]`.
    - **Get Emails by Recipient (GET /api/emails/recipient/{recipientId})**:
      ```powershell
      Invoke-WebRequest -Uri "http://localhost:8080/api/emails/recipient/2" -Method GET
      ```
+     - Example of using the .Content:
+     ```powershell
+     (Invoke-WebRequest -Uri "http://localhost:8080/api/emails/recipient/2" -Method GET).Content
+     ```
      - Response: `[{"id":1,"subject":"Meeting",...}]`.
    - **Get Email by ID (GET /api/emails/{id})**:
      ```powershell
      Invoke-WebRequest -Uri "http://localhost:8080/api/emails/1" -Method GET
+     ```
+     - Example of using the .Content:
+     ```powershell
+     (Invoke-WebRequest -Uri "http://localhost:8080/api/emails/1" -Method GET).Content
      ```
      - Response: `{"id":1,"subject":"Meeting",...}`.
    - **Delete Email (DELETE /api/emails/{id})**:
@@ -374,155 +402,153 @@ This section demonstrates testing all endpoints from a command-line interface (C
 
    **Command Notes**: Uses `-Uri` (URL), `-Method` (HTTP method), `-Headers` (hashtable), `-Body` (JSON payload, less escaping needed). Use `.Content` to see raw JSON (e.g., `(Invoke-WebRequest ...).Content`).
 
-
 3. **Testing with Windows (`curl.exe`)**:
    - **Create a User (POST /api/users)**:
      ```powershell
      curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d '{\"username\":\"charlie\",\"email\":\"charlie@example.com\",\"password\":\"pass789\"}'
      ```
-     - Response: `{"id":1,...}` (note the `id`, e.g., `1`).
+     - Response: `{"id":3,...}` (note the `id`, e.g., `3`).
    - **Create Another User**:
      ```powershell
-     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d '{\"username\":\"jason\",\"email\":\"jason@example.com\",\"password\":\"pass456\"}'
+     curl.exe -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d '{\"username\":\"dave\",\"email\":\"dave@example.com\",\"password\":\"pass101\"}'
      ```
-     - Response: `{"id":2,...}` (note `id`, e.g., `2`).
+     - Response: `{"id":4,...}` (note `id`, e.g., `4`).
    - **Get All Users (GET /api/users)**:
      ```powershell
      curl.exe -X GET "http://localhost:8080/api/users"
      ```
-     - Response: `[{"id":1,"username":"alice",...},{"id":2,"username":"bob",...}]`.
+     - Response: `[{"id":1,...},{"id":2,...},{"id":3,"username":"charlie",...},{"id":4,"username":"dave",...}]`.
    - **Get User by Username (GET /api/users/username/{username})**:
      ```powershell
-     curl.exe -X GET "http://localhost:8080/api/users/username/alice"
+     curl.exe -X GET "http://localhost:8080/api/users/username/charlie"
      ```
-     - Response: `{"id":1,"username":"alice",...}`.
+     - Response: `{"id":3,"username":"charlie",...}`.
    - **Get User by ID (GET /api/users/id/{id})**:
      ```powershell
-     curl.exe -X GET "http://localhost:8080/api/users/id/1"
+     curl.exe -X GET "http://localhost:8080/api/users/id/3"
      ```
-     - Response: `{"id":1,"username":"alice",...}`.
+     - Response: `{"id":3,"username":"charlie",...}`.
    - **Get User by Email (GET /api/users/email/{email})**:
      ```powershell
-     curl.exe -X GET "http://localhost:8080/api/users/email/alice@example.com"
+     curl.exe -X GET "http://localhost:8080/api/users/email/charlie@example.com"
      ```
-     - Response: `{"id":1,"username":"alice",...}`.
+     - Response: `{"id":3,"username":"charlie",...}`.
    - **Update User (PUT /api/users/{id})**:
      ```powershell
-     curl.exe -X PUT "http://localhost:8080/api/users/1" -H "Content-Type: application/json" -d "{\"username\":\"alice_new\",\"email\":\"alice.new@example.com\",\"password\":\"newpass789\"}"
+     curl.exe -X PUT "http://localhost:8080/api/users/3" -H "Content-Type: application/json" -d '{\"username\":\"charlie_new\",\"email\":\"charlie.new@example.com\",\"password\":\"newpass111\"}'
      ```
-     - Response: `{"id":1,"username":"alice_new",...}`.
+     - Response: `{"id":3,"username":"charlie_new",...}`.
    - **Delete User (DELETE /api/users/{id})**:
      ```powershell
-     curl.exe -X DELETE "http://localhost:8080/api/users/2"
+     curl.exe -X DELETE "http://localhost:8080/api/users/4"
      ```
      - Response: No content (204 status).
    - **Send an Email (POST /api/emails)**:
      ```powershell
-     curl.exe -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d "{\"subject\":\"Meeting\",\"senderId\":1,\"recipientId\":2,\"body\":\"Hi, meeting at 10.\"}"
+     curl.exe -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d '{\"subject\":\"Lunch\",\"senderId\":3,\"recipientId\":4,\"body\":\"Hi Dave, lunch at noon?\"}'
      ```
-     - Response: `{"id":1,...}` (note `id`, e.g., `1`).
+     - Response: `{"id":2,...}` (note `id`, e.g., `2`).
    - **Get All Emails (GET /api/emails)**:
      ```powershell
      curl.exe -X GET "http://localhost:8080/api/emails"
      ```
-     - Response: `[{"id":1,"subject":"Meeting",...}]`.
+     - Response: `[{"id":1,...},{"id":2,"subject":"Lunch",...}]`.
    - **Get Emails by Sender (GET /api/emails/sender/{senderId})**:
      ```powershell
-     curl.exe -X GET "http://localhost:8080/api/emails/sender/1"
+     curl.exe -X GET "http://localhost:8080/api/emails/sender/3"
      ```
-     - Response: `[{"id":1,"subject":"Meeting",...}]`.
+     - Response: `[{"id":2,"subject":"Lunch",...}]`.
    - **Get Emails by Recipient (GET /api/emails/recipient/{recipientId})**:
      ```powershell
-     curl.exe -X GET "http://localhost:8080/api/emails/recipient/2"
+     curl.exe -X GET "http://localhost:8080/api/emails/recipient/4"
      ```
-     - Response: `[{"id":1,"subject":"Meeting",...}]`.
+     - Response: `[{"id":2,"subject":"Lunch",...}]`.
    - **Get Email by ID (GET /api/emails/{id})**:
      ```powershell
-     curl.exe -X GET "http://localhost:8080/api/emails/1"
+     curl.exe -X GET "http://localhost:8080/api/emails/2"
      ```
-     - Response: `{"id":1,"subject":"Meeting",...}`.
+     - Response: `{"id":2,"subject":"Lunch",...}`.
    - **Delete Email (DELETE /api/emails/{id})**:
      ```powershell
-     curl.exe -X DELETE "http://localhost:8080/api/emails/1"
+     curl.exe -X DELETE "http://localhost:8080/api/emails/2"
      ```
      - Response: No content (204 status).
 
-   **Command Notes**: Uses `-X` (method), `-H` (header), `-d` (data, more escaping for quotes). Add `-s` to suppress progress output if desired.
+   **Command Notes**: Uses `-X` (method), `-H` (header), `-d` (data, use single quotes in PowerShell to avoid escaping issues). Add `-s` to suppress progress output if desired.
 
 4. **Testing with Linux/macOS (`curl`)**:
    - **Create a User (POST /api/users)**:
      ```bash
-     curl -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"username\":\"alice\",\"email\":\"alice@example.com\",\"password\":\"pass123\"}"
+     curl -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"username\":\"emma\",\"email\":\"emma@example.com\",\"password\":\"pass222\"}"
      ```
-     - Response: `{"id":1,...}` (note the `id`, e.g., `1`).
+     - Response: `{"id":5,...}` (note the `id`, e.g., `5`).
    - **Create Another User**:
      ```bash
-     curl -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"username\":\"bob\",\"email\":\"bob@example.com\",\"password\":\"pass456\"}"
+     curl -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"username\":\"frank\",\"email\":\"frank@example.com\",\"password\":\"pass333\"}"
      ```
-     - Response: `{"id":2,...}` (note `id`, e.g., `2`).
+     - Response: `{"id":6,...}` (note `id`, e.g., `6`).
    - **Get All Users (GET /api/users)**:
      ```bash
      curl -X GET "http://localhost:8080/api/users"
      ```
-     - Response: `[{"id":1,"username":"alice",...},{"id":2,"username":"bob",...}]`.
+     - Response: `[{"id":1,...},...,{"id":5,"username":"emma",...},{"id":6,"username":"frank",...}]`.
    - **Get User by Username (GET /api/users/username/{username})**:
      ```bash
-     curl -X GET "http://localhost:8080/api/users/username/alice"
+     curl -X GET "http://localhost:8080/api/users/username/emma"
      ```
-     - Response: `{"id":1,"username":"alice",...}`.
+     - Response: `{"id":5,"username":"emma",...}`.
    - **Get User by ID (GET /api/users/id/{id})**:
      ```bash
-     curl -X GET "http://localhost:8080/api/users/id/1"
+     curl -X GET "http://localhost:8080/api/users/id/5"
      ```
-     - Response: `{"id":1,"username":"alice",...}`.
+     - Response: `{"id":5,"username":"emma",...}`.
    - **Get User by Email (GET /api/users/email/{email})**:
      ```bash
-     curl -X GET "http://localhost:8080/api/users/email/alice@example.com"
+     curl -X GET "http://localhost:8080/api/users/email/emma@example.com"
      ```
-     - Response: `{"id":1,"username":"alice",...}`.
+     - Response: `{"id":5,"username":"emma",...}`.
    - **Update User (PUT /api/users/{id})**:
      ```bash
-     curl -X PUT "http://localhost:8080/api/users/1" -H "Content-Type: application/json" -d "{\"username\":\"alice_new\",\"email\":\"alice.new@example.com\",\"password\":\"newpass789\"}"
+     curl -X PUT "http://localhost:8080/api/users/5" -H "Content-Type: application/json" -d "{\"username\":\"emma_new\",\"email\":\"emma.new@example.com\",\"password\":\"newpass444\"}"
      ```
-     - Response: `{"id":1,"username":"alice_new",...}`.
+     - Response: `{"id":5,"username":"emma_new",...}`.
    - **Delete User (DELETE /api/users/{id})**:
      ```bash
-     curl -X DELETE "http://localhost:8080/api/users/2"
+     curl -X DELETE "http://localhost:8080/api/users/6"
      ```
      - Response: No content (204 status).
    - **Send an Email (POST /api/emails)**:
      ```bash
-     curl -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d "{\"subject\":\"Meeting\",\"senderId\":1,\"recipientId\":2,\"body\":\"Hi, meeting at 10.\"}"
+     curl -X POST "http://localhost:8080/api/emails" -H "Content-Type: application/json" -d "{\"subject\":\"Coffee\",\"senderId\":5,\"recipientId\":6,\"body\":\"Hi Frank, coffee at 3pm?\"}"
      ```
-     - Response: `{"id":1,...}` (note `id`, e.g., `1`).
+     - Response: `{"id":3,...}` (note `id`, e.g., `3`).
    - **Get All Emails (GET /api/emails)**:
      ```bash
      curl -X GET "http://localhost:8080/api/emails"
      ```
-     - Response: `[{"id":1,"subject":"Meeting",...}]`.
+     - Response: `[{"id":1,...},...,{"id":3,"subject":"Coffee",...}]`.
    - **Get Emails by Sender (GET /api/emails/sender/{senderId})**:
      ```bash
-     curl -X GET "http://localhost:8080/api/emails/sender/1"
+     curl -X GET "http://localhost:8080/api/emails/sender/5"
      ```
-     - Response: `[{"id":1,"subject":"Meeting",...}]`.
+     - Response: `[{"id":3,"subject":"Coffee",...}]`.
    - **Get Emails by Recipient (GET /api/emails/recipient/{recipientId})**:
      ```bash
-     curl -X GET "http://localhost:8080/api/emails/recipient/2"
+     curl -X GET "http://localhost:8080/api/emails/recipient/6"
      ```
-     - Response: `[{"id":1,"subject":"Meeting",...}]`.
+     - Response: `[{"id":3,"subject":"Coffee",...}]`.
    - **Get Email by ID (GET /api/emails/{id})**:
      ```bash
-     curl -X GET "http://localhost:8080/api/emails/1"
+     curl -X GET "http://localhost:8080/api/emails/3"
      ```
-     - Response: `{"id":1,"subject":"Meeting",...}`.
+     - Response: `{"id":3,"subject":"Coffee",...}`.
    - **Delete Email (DELETE /api/emails/{id})**:
      ```bash
-     curl -X DELETE "http://localhost:8080/api/emails/1"
+     curl -X DELETE "http://localhost:8080/api/emails/3"
      ```
      - Response: No content (204 status).
 
-   **Command Notes**: Uses `-X` (method), `-H` (header), `-d` (data, more escaping for quotes). Add `-s` to suppress progress output if desired.  
-
+   **Command Notes**: Uses `-X` (method), `-H` (header), `-d` (data, more escaping for quotes). Add `-s` to suppress progress output if desired.
 
 ### Testing via Postman
 
@@ -538,40 +564,48 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Body > raw > JSON:
        ```json
        {
-        "username":"alice",
-        "email":"alice@example.com",
-        "password":"pass123"
+         "username": "grace",
+         "email": "grace@example.com",
+         "password": "pass555"
        }
        ```
-     - Click “Send”. Response: `201 Created`, `{"id":1,...}` (note `id`).
-   - **Create Another User**: Repeat with `{"username":"bob","email":"bob@example.com","password":"pass456"}` (note `id`, e.g., `2`).
+     - Click “Send”. Response: `201 Created`, `{"id":7,...}` (note `id`, e.g., `7`).
+   - **Create Another User**: Repeat with:
+       ```json
+       {
+         "username": "hank",
+         "email": "hank@example.com",
+         "password": "pass666"
+       }
+       ```
+     - Response: `{"id":8,...}` (note `id`, e.g., `8`).
    - **Get All Users (GET /api/users)**:
      - New Request > Name: “Get All Users”.
      - Method: `GET`, URL: `http://localhost:8080/api/users`.
      - Send. Response: `200 OK`, array of users.
    - **Get User by Username (GET /api/users/username/{username})**:
-     - Method: `GET`, URL: `http://localhost:8080/api/users/username/alice`.
+     - Method: `GET`, URL: `http://localhost:8080/api/users/username/grace`.
      - Send. Response: `200 OK`, user details.
    - **Get User by ID (GET /api/users/id/{id})**:
-     - Method: `GET`, URL: `http://localhost:8080/api/users/id/1`.
+     - Method: `GET`, URL: `http://localhost:8080/api/users/id/7`.
      - Send. Response: `200 OK`, user details.
    - **Get User by Email (GET /api/users/email/{email})**:
-     - Method: `GET`, URL: `http://localhost:8080/api/users/email/alice@example.com`.
+     - Method: `GET`, URL: `http://localhost:8080/api/users/email/grace@example.com`.
      - Send. Response: `200 OK`, user details.
    - **Update User (PUT /api/users/{id})**:
-     - Method: `PUT`, URL: `http://localhost:8080/api/users/1`.
+     - Method: `PUT`, URL: `http://localhost:8080/api/users/7`.
      - Headers: `Content-Type: application/json`.
      - Body:
        ```json
        {
-        "username":"alice_new",
-        "email":"alice.new@example.com",
-        "password":"newpass789"
+         "username": "grace_new",
+         "email": "grace.new@example.com",
+         "password": "newpass777"
        }
        ```
      - Send. Response: `200 OK`, updated user.
    - **Delete User (DELETE /api/users/{id})**:
-     - Method: `DELETE`, URL: `http://localhost:8080/api/users/2`.
+     - Method: `DELETE`, URL: `http://localhost:8080/api/users/8`.
      - Send. Response: `204 No Content`.
 
 3. **Email Record Controller Tests**:
@@ -581,27 +615,27 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Body:
        ```json
        {
-         "subject": "Meeting",
-         "senderId": 1,
-         "recipientId": 2,
-         "body": "Hi, meeting at 10."
-         }
+         "subject": "Dinner",
+         "senderId": 7,
+         "recipientId": 8,
+         "body": "Hi Hank, dinner at 7pm?"
+       }
        ```
-     - Send. Response: `201 Created`, `{"id":1,...}`.
+     - Send. Response: `201 Created`, `{"id":4,...}`.
    - **Get All Emails (GET /api/emails)**:
      - Method: `GET`, URL: `http://localhost:8080/api/emails`.
      - Send. Response: `200 OK`, email array.
    - **Get Emails by Sender (GET /api/emails/sender/{senderId})**:
-     - Method: `GET`, URL: `http://localhost:8080/api/emails/sender/1`.
-     - Send. Response: `200 OK`, emails sent by user 1.
+     - Method: `GET`, URL: `http://localhost:8080/api/emails/sender/7`.
+     - Send. Response: `200 OK`, emails sent by user 7.
    - **Get Emails by Recipient (GET /api/emails/recipient/{recipientId})**:
-     - Method: `GET`, URL: `http://localhost:8080/api/emails/recipient/2`.
-     - Send. Response: `200 OK`, emails received by user 2.
+     - Method: `GET`, URL: `http://localhost:8080/api/emails/recipient/8`.
+     - Send. Response: `200 OK`, emails received by user 8.
    - **Get Email by ID (GET /api/emails/{id})**:
-     - Method: `GET`, URL: `http://localhost:8080/api/emails/1`.
+     - Method: `GET`, URL: `http://localhost:8080/api/emails/4`.
      - Send. Response: `200 OK`, email details.
    - **Delete Email (DELETE /api/emails/{id})**:
-     - Method: `DELETE`, URL: `http://localhost:8080/api/emails/1`.
+     - Method: `DELETE`, URL: `http://localhost:8080/api/emails/4`.
      - Send. Response: `204 No Content`.
 
 ### Testing via Swagger UI
@@ -615,57 +649,65 @@ This section demonstrates testing all endpoints from a command-line interface (C
      - Edit the request body:
        ```json
        {
-        "username":"alice",
-        "email":"alice@example.com",
-        "password":"pass123"
+         "username": "iris",
+         "email": "iris@example.com",
+         "password": "pass888"
        }
        ```
-     - Click “Execute”. Response: `201`, `{"id":1,...}` (note `id`).
-   - **Create Another User**: Repeat with `{"username":"bob","email":"bob@example.com","password":"pass456"}` (note `id`).
+     - Click “Execute”. Response: `201`, `{"id":9,...}` (note `id`, e.g., `9`).
+   - **Create Another User**: Repeat with:
+       ```json
+       {
+         "username": "jack",
+         "email": "jack@example.com",
+         "password": "pass999"
+       }
+       ```
+     - Response: `{"id":10,...}` (note `id`, e.g., `10`).
    - **Get All Users (GET /api/users)**:
      - Expand `GET /api/users`, click “Try it out”, then “Execute”.
      - Response: `200`, user list.
    - **Get User by Username (GET /api/users/username/{username})**:
-     - Expand, enter `alice` in `username`, execute. Response: `200`, user details.
+     - Expand, enter `iris` in `username`, execute. Response: `200`, user details.
    - **Get User by ID (GET /api/users/id/{id})**:
-     - Enter `1` in `id`, execute. Response: `200`, user details.
+     - Enter `9` in `id`, execute. Response: `200`, user details.
    - **Get User by Email (GET /api/users/email/{email})**:
-     - Enter `alice@example.com` in `email`, execute. Response: `200`, user details.
+     - Enter `iris@example.com` in `email`, execute. Response: `200`, user details.
    - **Update User (PUT /api/users/{id})**:
-     - Enter `1` in `id`, edit body:
+     - Enter `9` in `id`, edit body:
        ```json
        {
-        "username":"alice_new",
-        "email":"alice.new@example.com",
-        "password":"newpass789"
+         "username": "iris_new",
+         "email": "iris.new@example.com",
+         "password": "newpass000"
        }
        ```
      - Execute. Response: `200`, updated user.
    - **Delete User (DELETE /api/users/{id})**:
-     - Enter `2` in `id`, execute. Response: `204`.
+     - Enter `10` in `id`, execute. Response: `204`.
 
 3. **Email Record Controller Tests**:
    - **Send an Email (POST /api/emails)**:
      - Expand `POST /api/emails`, edit body:
        ```json
-        {
-         "subject": "Meeting",
-         "senderId": 1,
-         "recipientId": 2,
-         "body": "Hi, meeting at 10."
-         }
+       {
+         "subject": "Movie",
+         "senderId": 9,
+         "recipientId": 10,
+         "body": "Hi Jack, movie at 8pm?"
+       }
        ```
-     - Execute. Response: `201`, `{"id":1,...}`.
+     - Execute. Response: `201`, `{"id":5,...}`.
    - **Get All Emails (GET /api/emails)**:
      - Execute. Response: `200`, email list.
    - **Get Emails by Sender (GET /api/emails/sender/{senderId})**:
-     - Enter `1` in `senderId`, execute. Response: `200`, sender’s emails.
+     - Enter `9` in `senderId`, execute. Response: `200`, sender’s emails.
    - **Get Emails by Recipient (GET /api/emails/recipient/{recipientId})**:
-     - Enter `2` in `recipientId`, execute. Response: `200`, recipient’s emails.
+     - Enter `10` in `recipientId`, execute. Response: `200`, recipient’s emails.
    - **Get Email by ID (GET /api/emails/{id})**:
-     - Enter `1` in `id`, execute. Response: `200`, email details.
+     - Enter `5` in `id`, execute. Response: `200`, email details.
    - **Delete Email (DELETE /api/emails/{id})**:
-     - Enter `1` in `id`, execute. Response: `204`.
+     - Enter `5` in `id`, execute. Response: `204`.
 
 ## Additional Notes
 
