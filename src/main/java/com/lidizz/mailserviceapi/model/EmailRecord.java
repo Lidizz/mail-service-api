@@ -46,8 +46,6 @@ public class EmailRecord {
     @CreationTimestamp
     private Instant sentAt;
 
-//    private LocalDateTime readAt;
-
     // Default constructor
     public EmailRecord() {
 
@@ -103,14 +101,6 @@ public class EmailRecord {
         this.body = body;
     }
 
-
-//    public LocalDateTime getReadAt() {
-//        return readAt;
-//    }
-//
-//    public void setReadAt(LocalDateTime readAt) {
-//        this.readAt = readAt;
-//    }
 
     @Override
     public String toString() {

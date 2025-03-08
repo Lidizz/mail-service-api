@@ -14,10 +14,4 @@ public interface EmailRecordRepository extends JpaRepository<EmailRecord, Long> 
     // Find all emails by recipient address
     List<EmailRecord> findAllByRecipient(User recipient);
 
-//    // Find all emails by sender
-//    List<EmailRecord> findAllBySender(User sender, Pageable pageable);
-//
-//    // Find all emails by recipient
-//    List<EmailRecord> findAllByRecipient(User recipient, Pageable pageable);
-
 }

@@ -16,10 +16,10 @@ public class EmailRecordDTO {
     @NotBlank(message = "Body is required")
     private String body;
 
-    // Default constructor
+    // No-args constructor
     public EmailRecordDTO() {}
 
-    // Constructor with fields
+    // Args constructor
     public EmailRecordDTO(String subject, Long senderId, Long recipientId, String body) {
         this.subject = subject;
         this.senderId = senderId;
