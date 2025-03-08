@@ -68,7 +68,7 @@ Before proceeding with any setup method, install PostgreSQL and create the requi
 1. **Install PostgreSQL**:
    - Visit [postgresql.org/download](https://www.postgresql.org/download/) and select your operating system (e.g., Windows, macOS, Linux).
    - Download the installer and run it. During installation:
-     - Set a password for the `postgres` user (e.g., `your_password`—write it down!).
+     - Set a password for the `postgres` user (e.g., `your_password`—store it for later use).
      - Accept the default port `5432` unless you need to change it.
    - After installation, PostgreSQL should start automatically. On Windows, check the “Services” app (search in Start menu) for “postgresql-x64-XX” (XX is the version, e.g., 16) and ensure it’s running. On Linux/macOS, it starts via the installer or use `sudo service postgresql start`.
 
@@ -79,7 +79,7 @@ Before proceeding with any setup method, install PostgreSQL and create the requi
        ```bash
        psql -U postgres
        ```
-     - You’ll see: `Password for user postgres:`. Enter your password (e.g., `your_password`) and press Enter.
+     - You’ll see: `Password for user postgres:`. Enter your password (e.g., `your_password`, it may not show that you enter anything in the shell while you enter your password, it is normal) and press Enter.
      - At the `postgres=#` prompt, create the database:
        ```sql
        CREATE DATABASE mail_service_db;
@@ -194,16 +194,20 @@ Now, proceed to your preferred setup method below.
    - Fill in:
      - **Name**: `MailServiceApi` (this names your run configuration).
      - **Main class**: Type or browse to `com.lidizz.mailserviceapi.MailServiceApiApplication`.
-   - Click “Modify options” (a small wrench icon or alt + M), then check “Environment variables”.
-   - In the “Environment variables” field, enter:
+   - Click “Modify options” (alt + M), then check “Environment variables” or “Program arguments” (both work; arguments match CLI style, variables are production-friendly).
+   - If you go with “Environment variables”, in the field, enter:
      ```plaintext
      DB_USERNAME=postgres;DB_PASSWORD=your_password
+     ```
+   - If you go with “Program arguments”, in the field, enter:
+     ```plaintext
+     --DB_USERNAME=postgres --DB_PASSWORD=your_password
      ```
      Replace `your_password` with your PostgreSQL password from the setup.
    - Click `Apply`, then `OK`.
 
 4. **Build and Run**:
-   - On the right side, open the “Maven” tab (a blue “M” icon).
+   - On the right side, open the “Maven” tab (“M” icon).
    - Expand `mail-service-api > Lifecycle`, double-click `clean`, then `install`. Wait for “BUILD SUCCESS” in the console.
    - Click the green “Run” triangle next to `MailServiceApi` in the top toolbar.
    - The app starts, and you’ll see `Started MailServiceApiApplication` in the Run window. It’s now at `http://localhost:8080`.
