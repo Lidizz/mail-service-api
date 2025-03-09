@@ -728,3 +728,7 @@ This section demonstrates testing all endpoints from a command-line interface (C
 - **500 Errors**: See server logs (console output) for details.
 - **Not Found Errors**: Ensure users/emails exist before using their IDs.
 - **Seeing PowerShell Responses**: `Invoke-WebRequest` returns an object; use `.Content` to see raw JSON (e.g., `(Invoke-WebRequest -Uri "http://localhost:8080/api/users" -Method GET).Content`).
+
+## License
+
+[MIT License](LICENSE)
