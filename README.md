@@ -25,6 +25,7 @@ This project is a RESTful Mail Service API built with Spring Boot, Java, and Pos
   - [Testing via Swagger UI](#testing-via-swagger-ui)
 - [Additional Notes](#additional-notes)
 - [Troubleshooting](#troubleshooting)
+- [License](#license)
 
 ## Project Overview
 
