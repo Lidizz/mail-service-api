@@ -36,7 +36,7 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.REMOVE, orphanRemoval = true)
-     private Set<EmailRecord> receivedEmailRecords = new HashSet<>();
+    private Set<EmailRecord> receivedEmailRecords = new HashSet<>();
 
     // NoArgsConstructor
     public User() {
