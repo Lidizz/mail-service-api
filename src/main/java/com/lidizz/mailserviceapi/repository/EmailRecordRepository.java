@@ -13,5 +13,4 @@ public interface EmailRecordRepository extends JpaRepository<EmailRecord, Long> 
 
     // Find all emails by recipient address
     List<EmailRecord> findAllByRecipient(User recipient);
-
 }
