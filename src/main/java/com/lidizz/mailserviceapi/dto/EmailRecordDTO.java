@@ -1,4 +1,4 @@
-package com.lidizz.mailserviceapi.model;
+package com.lidizz.mailserviceapi.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

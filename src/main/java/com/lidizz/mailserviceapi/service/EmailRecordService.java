@@ -1,5 +1,6 @@
 package com.lidizz.mailserviceapi.service;
 
+import com.lidizz.mailserviceapi.exception.EmailNotFoundException;
 import com.lidizz.mailserviceapi.model.EmailRecord;
 import com.lidizz.mailserviceapi.model.User;
 import com.lidizz.mailserviceapi.repository.EmailRecordRepository;

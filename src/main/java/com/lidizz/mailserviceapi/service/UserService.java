@@ -1,5 +1,8 @@
 package com.lidizz.mailserviceapi.service;
 
+import com.lidizz.mailserviceapi.exception.EmailAlreadyExistsException;
+import com.lidizz.mailserviceapi.exception.UserNotFoundException;
+import com.lidizz.mailserviceapi.exception.UsernameAlreadyExistsException;
 import com.lidizz.mailserviceapi.model.User;
 import com.lidizz.mailserviceapi.repository.UserRepository;
 import jakarta.transaction.Transactional;

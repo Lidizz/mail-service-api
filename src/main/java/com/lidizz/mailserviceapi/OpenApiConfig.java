@@ -10,7 +10,7 @@ import io.swagger.v3.oas.models.info.Info;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI carDatabaseOpenAPI() {
+    public OpenAPI mailDatabaseOpenAPI() {
         return new OpenAPI().info(new Info().title("Mail-Service REST API").description("My mail-service").version("1.0"));
     }
 }

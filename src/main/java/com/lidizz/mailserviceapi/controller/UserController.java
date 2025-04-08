@@ -1,10 +1,10 @@
 package com.lidizz.mailserviceapi.controller;
 
 import com.lidizz.mailserviceapi.model.User;
-import com.lidizz.mailserviceapi.service.EmailAlreadyExistsException;
-import com.lidizz.mailserviceapi.service.UserNotFoundException;
+import com.lidizz.mailserviceapi.exception.EmailAlreadyExistsException;
+import com.lidizz.mailserviceapi.exception.UserNotFoundException;
 import com.lidizz.mailserviceapi.service.UserService;
-import com.lidizz.mailserviceapi.service.UsernameAlreadyExistsException;
+import com.lidizz.mailserviceapi.exception.UsernameAlreadyExistsException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

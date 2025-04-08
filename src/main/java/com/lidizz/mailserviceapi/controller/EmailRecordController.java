@@ -1,11 +1,11 @@
 package com.lidizz.mailserviceapi.controller;
 
 import com.lidizz.mailserviceapi.model.EmailRecord;
-import com.lidizz.mailserviceapi.model.EmailRecordDTO;
+import com.lidizz.mailserviceapi.dto.EmailRecordDTO;
 import com.lidizz.mailserviceapi.model.User;
-import com.lidizz.mailserviceapi.service.EmailNotFoundException;
+import com.lidizz.mailserviceapi.exception.EmailNotFoundException;
 import com.lidizz.mailserviceapi.service.EmailRecordService;
-import com.lidizz.mailserviceapi.service.UserNotFoundException;
+import com.lidizz.mailserviceapi.exception.UserNotFoundException;
 import com.lidizz.mailserviceapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

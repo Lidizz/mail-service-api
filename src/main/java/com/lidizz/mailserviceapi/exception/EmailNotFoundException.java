@@ -1,4 +1,4 @@
-package com.lidizz.mailserviceapi.service;
+package com.lidizz.mailserviceapi.exception;
 
 public class EmailNotFoundException extends RuntimeException {
 
