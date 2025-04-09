@@ -3,16 +3,13 @@ package com.lidizz.mailserviceapi.controller;
 import com.lidizz.mailserviceapi.model.EmailRecord;
 import com.lidizz.mailserviceapi.dto.EmailRecordDTO;
 import com.lidizz.mailserviceapi.model.User;
-import com.lidizz.mailserviceapi.exception.EmailNotFoundException;
 import com.lidizz.mailserviceapi.service.EmailRecordService;
-import com.lidizz.mailserviceapi.exception.UserNotFoundException;
 import com.lidizz.mailserviceapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -73,15 +70,5 @@ public class EmailRecordController {
     public ResponseEntity<Void> deleteEmailById(@PathVariable Long id) {
         emailRecordService.deleteEmailById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @ExceptionHandler(EmailNotFoundException.class)
-    public ResponseEntity<String> handleEmailNotFoundException(EmailNotFoundException ex) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
     }
 }
