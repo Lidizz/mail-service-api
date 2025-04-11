@@ -6,7 +6,17 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Status](https://img.shields.io/badge/Status-Development-red)
 
-This project is a RESTful Mail Service API built with Spring Boot, Java, and PostgreSQL. It provides a robust backend for managing users and email records, showcasing the integration of Spring Boot with RESTful web services and Spring Data JPA for seamless database operations. This guide is for educational purposes and was made to be beginner-friendly. It will allow you to clone, run and test the project from your local environment.
+This project is a RESTful Mail Service API built with Spring Boot, Java, and PostgreSQL. 
+It provides a robust backend for managing users and email records, showcasing the integration of Spring Boot with RESTful web services and Spring Data JPA for seamless database operations.
+This guide is for educational purposes and was made to be beginner-friendly. 
+It will allow you to clone, run and test the project from your local environment.
+
+## Team  
+- **Lidor Shachar**
+- **Sahrish Nosheen**
+- **Christin Wøien Skattum**
+- **Camilla Dahl Strømberg**
+- **Adnan Mohamed Osman Arab**
 
 ## Table of Contents
 - [Project Overview](#project-overview)
